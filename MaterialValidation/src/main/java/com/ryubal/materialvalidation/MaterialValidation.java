@@ -1,0 +1,120 @@
+package com.ryubal.materialvalidation;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.ryubal.materialvalidation.custom.CustomValidation;
+import com.ryubal.materialvalidation.validations.Range;
+import com.ryubal.materialvalidation.validations.Simple;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class MaterialValidation {
+
+    // Holder of all of the validations that were added
+    private List<SingleValidation> validationsList;
+
+    // Constructor
+    public MaterialValidation() {
+        this.validationsList = new ArrayList<>();
+    }
+
+    // Add a new rule with Regex as String
+    public void add(TextInputLayout textInputLayout, String regex, String errorMsg) {
+        Pattern pattern = Pattern.compile(regex);
+        add(textInputLayout, pattern, errorMsg);
+    }
+
+    // Add a new rule with Regex as Pattern
+    public void add(TextInputLayout textInputLayout, Pattern pattern, String errorMsg) {
+        SingleValidation singleValidation = new SingleValidation(textInputLayout, pattern, errorMsg);
+        validationsList.add(singleValidation);
+    }
+
+    // Add a new rule with Range -- It will validate the text is a number between "from" and "to" in Range
+    public void add(TextInputLayout textInputLayout, Range range, String errorMsg) {
+        SingleValidation singleValidation = new SingleValidation(textInputLayout, range, errorMsg);
+        validationsList.add(singleValidation);
+    }
+
+    // Add a new rule with Simple validation -- Is is a pre-defined validation with an argument
+    public void add(TextInputLayout textInputLayout, Simple simple, int arg, String errorMsg) {
+        SingleValidation singleValidation = new SingleValidation(textInputLayout, simple, arg, errorMsg);
+        validationsList.add(singleValidation);
+    }
+
+    // Add a new rule with a Custom validation
+    public void add(TextInputLayout textInputLayout, CustomValidation customValidation, String errorMsg) {
+        SingleValidation singleValidation = new SingleValidation(textInputLayout, customValidation, errorMsg);
+        validationsList.add(singleValidation);
+    }
+
+    // Run validation
+    public boolean validate() {
+        boolean isValid = true;
+
+        // Keep track of invalid fields.. In case a field was added more than once, to prevent
+        // further validations until it's valid
+        List<TextInputLayout> validated = new ArrayList<>();
+
+        for(SingleValidation validation: validationsList) {
+            // Run validation only is this field is not invalid yet
+            if(!validated.contains(validation.getTextInputLayout())) {
+                boolean isCurrentValid;
+
+                // PATTERN, RANGE, SIMPLE, CUSTOM
+                if(validation.getValidationType() == SingleValidation.ValidationType.PATTERN)
+                    isCurrentValid = validateRegex(validation);
+                else if(validation.getValidationType() == SingleValidation.ValidationType.RANGE)
+                    isCurrentValid = validateRange(validation);
+                else if(validation.getValidationType() == SingleValidation.ValidationType.SIMPLE)
+                    isCurrentValid = validateSimple(validation);
+                else if(validation.getValidationType() == SingleValidation.ValidationType.CUSTOM)
+                    isCurrentValid = validateCustom(validation);
+                else
+                    isCurrentValid = true;
+
+                isValid = isCurrentValid && isValid;
+
+                // If this input was invalid, add it to the list of invalid inputs
+                if(!isCurrentValid)
+                    validated.add(validation.getTextInputLayout());
+            }
+        }
+
+        return isValid;
+    }
+
+    private boolean validateRegex(SingleValidation validation) {
+        Matcher matcher = validation.getPattern().matcher(validation.getText());
+        if(!matcher.matches()) {
+            validation.getTextInputLayout().setError(validation.getErrorMsg());
+            return false;
+        }
+
+        validation.getTextInputLayout().setError(null);
+        return true;
+    }
+
+    private boolean validateRange(SingleValidation validation) {
+        try {
+            int intVal = Integer.parseInt(validation.getText());
+            return intVal >= validation.getRange().from && intVal <= validation.getRange().to;
+        }catch(NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private boolean validateSimple(SingleValidation validation) {
+        if(validation.getSimpleValidation() == Simple.MIN_LENGTH)
+            return validation.getText().length() >= validation.getSimpleValidationArg();
+        else if(validation.getSimpleValidation() == Simple.MAX_LENGTH)
+            return validation.getText().length() <= validation.getSimpleValidationArg();
+        return false;
+    }
+
+    private boolean validateCustom(SingleValidation validation) {
+        return validation.getCustomValidation().validate(validation.getText());
+    }
+}

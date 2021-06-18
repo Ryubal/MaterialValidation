@@ -1,2 +1,3 @@
 rootProject.name = "MaterialValidation"
 include ':app'
+include ':MaterialValidation'
