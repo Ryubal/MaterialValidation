@@ -98,23 +98,53 @@ public class MaterialValidation {
     }
 
     private boolean validateRange(SingleValidation validation) {
+        String errorMsg = null;
+
         try {
             int intVal = Integer.parseInt(validation.getText());
-            return intVal >= validation.getRange().from && intVal <= validation.getRange().to;
+            boolean result = intVal >= validation.getRange().from && intVal <= validation.getRange().to;
+
+            if(!result)
+                errorMsg = validation.getErrorMsg();
+
         }catch(NumberFormatException e) {
-            return false;
+            errorMsg = validation.getErrorMsg();
         }
+
+        validation.getTextInputLayout().setError(errorMsg);
+
+        return errorMsg == null;
     }
 
     private boolean validateSimple(SingleValidation validation) {
-        if(validation.getSimpleValidation() == Simple.MIN_LENGTH)
-            return validation.getText().length() >= validation.getSimpleValidationArg();
-        else if(validation.getSimpleValidation() == Simple.MAX_LENGTH)
-            return validation.getText().length() <= validation.getSimpleValidationArg();
-        return false;
+        String errorMsg = null;
+
+        if(validation.getSimpleValidation() == Simple.MIN_LENGTH) {
+            boolean result = validation.getText().length() >= validation.getSimpleValidationArg();
+
+            if(!result)
+                errorMsg = validation.getErrorMsg();
+
+        }else if(validation.getSimpleValidation() == Simple.MAX_LENGTH) {
+            boolean result = validation.getText().length() <= validation.getSimpleValidationArg();
+
+            if(!result)
+                errorMsg = validation.getErrorMsg();
+        }
+
+        validation.getTextInputLayout().setError(errorMsg);
+
+        return errorMsg == null;
     }
 
     private boolean validateCustom(SingleValidation validation) {
-        return validation.getCustomValidation().validate(validation.getText());
+        boolean result = validation.getCustomValidation().validate(validation.getText());
+
+        if(result)
+            validation.getTextInputLayout().setError(null);
+        else
+            validation.getTextInputLayout().setError(validation.getErrorMsg());
+
+        return result;
     }
 }
