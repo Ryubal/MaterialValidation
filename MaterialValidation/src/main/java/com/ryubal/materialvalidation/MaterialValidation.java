@@ -15,9 +15,13 @@ public class MaterialValidation {
     // Holder of all of the validations that were added
     private List<SingleValidation> validationsList;
 
+    // Holder of invalid text input layouts
+    private List<TextInputLayout> invalidTextInputLayouts;
+
     // Constructor
     public MaterialValidation() {
         this.validationsList = new ArrayList<>();
+        this.invalidTextInputLayouts = new ArrayList<>();
     }
 
     // Add a new rule with Regex as String
@@ -54,13 +58,11 @@ public class MaterialValidation {
     public boolean validate() {
         boolean isValid = true;
 
-        // Keep track of invalid fields.. In case a field was added more than once, to prevent
-        // further validations until it's valid
-        List<TextInputLayout> validated = new ArrayList<>();
-
         for(SingleValidation validation: validationsList) {
             // Run validation only is this field is not invalid yet
-            if(!validated.contains(validation.getTextInputLayout())) {
+            // This is because a field can be added more than once. In that case, we'll prevent further
+            // validations of the same field when it is invalid
+            if(!invalidTextInputLayouts.contains(validation.getTextInputLayout())) {
                 boolean isCurrentValid;
 
                 // PATTERN, RANGE, SIMPLE, CUSTOM
@@ -79,11 +81,15 @@ public class MaterialValidation {
 
                 // If this input was invalid, add it to the list of invalid inputs
                 if(!isCurrentValid)
-                    validated.add(validation.getTextInputLayout());
+                    invalidTextInputLayouts.add(validation.getTextInputLayout());
             }
         }
 
         return isValid;
+    }
+
+    public List<TextInputLayout> getInvalidFields() {
+        return this.invalidTextInputLayouts;
     }
 
     private boolean validateRegex(SingleValidation validation) {
@@ -94,6 +100,7 @@ public class MaterialValidation {
         }
 
         validation.getTextInputLayout().setError(null);
+        validation.getTextInputLayout().setErrorEnabled(false);
         return true;
     }
 
@@ -112,6 +119,9 @@ public class MaterialValidation {
         }
 
         validation.getTextInputLayout().setError(errorMsg);
+
+        if(errorMsg == null)
+            validation.getTextInputLayout().setErrorEnabled(false);
 
         return errorMsg == null;
     }
@@ -134,15 +144,19 @@ public class MaterialValidation {
 
         validation.getTextInputLayout().setError(errorMsg);
 
+        if(errorMsg == null)
+            validation.getTextInputLayout().setErrorEnabled(false);
+
         return errorMsg == null;
     }
 
     private boolean validateCustom(SingleValidation validation) {
         boolean result = validation.getCustomValidation().validate(validation.getText());
 
-        if(result)
+        if(result) {
             validation.getTextInputLayout().setError(null);
-        else
+            validation.getTextInputLayout().setErrorEnabled(false);
+        }else
             validation.getTextInputLayout().setError(validation.getErrorMsg());
 
         return result;
