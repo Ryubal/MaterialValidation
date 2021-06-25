@@ -1,6 +1,7 @@
 package com.ryubal.materialvalidation;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.ryubal.materialvalidation.custom.CustomManualValidation;
 import com.ryubal.materialvalidation.custom.CustomValidation;
 import com.ryubal.materialvalidation.validations.Range;
 import com.ryubal.materialvalidation.validations.Simple;
@@ -22,6 +23,12 @@ public class MaterialValidation {
     public MaterialValidation() {
         this.validationsList = new ArrayList<>();
         this.invalidTextInputLayouts = new ArrayList<>();
+    }
+
+    // Manual validation
+    public void add(CustomManualValidation customManualValidation) {
+        SingleValidation singleValidation = new SingleValidation(customManualValidation);
+        validationsList.add(singleValidation);
     }
 
     // Add a new rule with Regex as String
@@ -59,29 +66,35 @@ public class MaterialValidation {
         boolean isValid = true;
 
         for(SingleValidation validation: validationsList) {
-            // Run validation only is this field is not invalid yet
-            // This is because a field can be added more than once. In that case, we'll prevent further
-            // validations of the same field when it is invalid
-            if(!invalidTextInputLayouts.contains(validation.getTextInputLayout())) {
-                boolean isCurrentValid;
+            // Do we have a manual validation?
+            if(validation.getCustomManualValidation() != null) {
+                isValid = validateCustomManual(validation) && isValid;
 
-                // PATTERN, RANGE, SIMPLE, CUSTOM
-                if(validation.getValidationType() == SingleValidation.ValidationType.PATTERN)
-                    isCurrentValid = validateRegex(validation);
-                else if(validation.getValidationType() == SingleValidation.ValidationType.RANGE)
-                    isCurrentValid = validateRange(validation);
-                else if(validation.getValidationType() == SingleValidation.ValidationType.SIMPLE)
-                    isCurrentValid = validateSimple(validation);
-                else if(validation.getValidationType() == SingleValidation.ValidationType.CUSTOM)
-                    isCurrentValid = validateCustom(validation);
-                else
-                    isCurrentValid = true;
+            }else if(validation.getTextInputLayout() != null) {
+                // Run validation only is this field is not invalid yet
+                // This is because a field can be added more than once. In that case, we'll prevent further
+                // validations of the same field when it is invalid
+                if (!invalidTextInputLayouts.contains(validation.getTextInputLayout())) {
+                    boolean isCurrentValid;
 
-                isValid = isCurrentValid && isValid;
+                    // PATTERN, RANGE, SIMPLE, CUSTOM
+                    if (validation.getValidationType() == SingleValidation.ValidationType.PATTERN)
+                        isCurrentValid = validateRegex(validation);
+                    else if (validation.getValidationType() == SingleValidation.ValidationType.RANGE)
+                        isCurrentValid = validateRange(validation);
+                    else if (validation.getValidationType() == SingleValidation.ValidationType.SIMPLE)
+                        isCurrentValid = validateSimple(validation);
+                    else if (validation.getValidationType() == SingleValidation.ValidationType.CUSTOM)
+                        isCurrentValid = validateCustom(validation);
+                    else
+                        isCurrentValid = true;
 
-                // If this input was invalid, add it to the list of invalid inputs
-                if(!isCurrentValid)
-                    invalidTextInputLayouts.add(validation.getTextInputLayout());
+                    isValid = isCurrentValid && isValid;
+
+                    // If this input was invalid, add it to the list of invalid inputs
+                    if (!isCurrentValid)
+                        invalidTextInputLayouts.add(validation.getTextInputLayout());
+                }
             }
         }
 
@@ -160,5 +173,9 @@ public class MaterialValidation {
             validation.getTextInputLayout().setError(validation.getErrorMsg());
 
         return result;
+    }
+
+    private boolean validateCustomManual(SingleValidation validation) {
+        return validation.getCustomManualValidation().validate();
     }
 }

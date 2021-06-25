@@ -1,6 +1,7 @@
 package com.ryubal.materialvalidation;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.ryubal.materialvalidation.custom.CustomManualValidation;
 import com.ryubal.materialvalidation.custom.CustomValidation;
 import com.ryubal.materialvalidation.exceptions.MissingEditTextException;
 import com.ryubal.materialvalidation.validations.Range;
@@ -20,10 +21,15 @@ public class SingleValidation {
     private Simple simpleValidation;                // If applicable
     private int simpleValidationArg;                // If applicable
     private CustomValidation customValidation;      // If applicable
+    private CustomManualValidation customManualValidation; // If applicable
     public enum ValidationType {
         PATTERN, RANGE, SIMPLE, CUSTOM
     };
     private ValidationType validationType;
+
+    public SingleValidation(CustomManualValidation customManualValidation) {
+        this.customManualValidation = customManualValidation;
+    }
 
     public SingleValidation(TextInputLayout textInputLayout, Pattern pattern, String errorMsg) {
         this.textInputLayout = textInputLayout;
@@ -94,5 +100,9 @@ public class SingleValidation {
 
     public CustomValidation getCustomValidation() {
         return customValidation;
+    }
+
+    public CustomManualValidation getCustomManualValidation() {
+        return customManualValidation;
     }
 }
