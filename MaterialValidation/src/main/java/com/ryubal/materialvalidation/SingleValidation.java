@@ -23,12 +23,13 @@ public class SingleValidation {
     private CustomValidation customValidation;      // If applicable
     private CustomManualValidation customManualValidation; // If applicable
     public enum ValidationType {
-        PATTERN, RANGE, SIMPLE, CUSTOM
+        PATTERN, RANGE, SIMPLE, CUSTOM, CUSTOM_MANUAL
     };
     private ValidationType validationType;
 
     public SingleValidation(CustomManualValidation customManualValidation) {
         this.customManualValidation = customManualValidation;
+        this.validationType = ValidationType.CUSTOM_MANUAL;
     }
 
     public SingleValidation(TextInputLayout textInputLayout, Pattern pattern, String errorMsg) {

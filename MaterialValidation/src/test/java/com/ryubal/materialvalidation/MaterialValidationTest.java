@@ -4,6 +4,7 @@ import android.text.Editable;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.ryubal.materialvalidation.custom.CustomManualValidation;
 import com.ryubal.materialvalidation.custom.CustomValidation;
 import com.ryubal.materialvalidation.validations.Range;
 import com.ryubal.materialvalidation.validations.Simple;
@@ -39,6 +40,8 @@ public class MaterialValidationTest {
 
     private final CustomValidation validCustomValidation = input -> true;
     private final CustomValidation invalidCustomValidation = input -> false;
+
+    @Mock CustomManualValidation customManualValidation;
 
     @Before
     public void setup() {
@@ -173,5 +176,14 @@ public class MaterialValidationTest {
         materialValidation.add(textInputLayout, invalidCustomValidation, "error_msg");
         assertFalse(materialValidation.validate());
         verify(textInputLayout, times(1)).setError("error_msg");
+    }
+
+    @Test
+    public void testCustomManualValidation() {
+        materialValidation.add(customManualValidation);
+        when(customManualValidation.validate()).thenReturn(true);
+
+        assertTrue(materialValidation.validate());
+        verify(customManualValidation, times(1)).validate();
     }
 }

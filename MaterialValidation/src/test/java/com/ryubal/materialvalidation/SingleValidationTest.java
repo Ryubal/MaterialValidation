@@ -4,6 +4,7 @@ import android.text.Editable;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.ryubal.materialvalidation.custom.CustomManualValidation;
 import com.ryubal.materialvalidation.custom.CustomValidation;
 import com.ryubal.materialvalidation.exceptions.MissingEditTextException;
 import com.ryubal.materialvalidation.validations.Range;
@@ -30,11 +31,13 @@ public class SingleValidationTest {
     @Mock Range range;
     @Mock Simple simple;
     @Mock CustomValidation customValidation;
+    @Mock CustomManualValidation customManualValidation;
 
     private SingleValidation singleValidationWithPattern;
     private SingleValidation singleValidationWithRange;
     private SingleValidation singleValidationWithSimple;
     private SingleValidation singleValidationWithCustom;
+    private SingleValidation singleValidationWithCustomManual;
 
     @Before
     public void setup() {
@@ -42,6 +45,7 @@ public class SingleValidationTest {
         singleValidationWithRange = new SingleValidation(textInputLayout, range, "");
         singleValidationWithSimple = new SingleValidation(textInputLayout, simple, 0, "");
         singleValidationWithCustom = new SingleValidation(textInputLayout, customValidation, "");
+        singleValidationWithCustomManual = new SingleValidation(customManualValidation);
     }
 
     @Test
@@ -62,6 +66,11 @@ public class SingleValidationTest {
     @Test
     public void isSingleValidationTypeCustom() {
         assertEquals(singleValidationWithCustom.getValidationType(), SingleValidation.ValidationType.CUSTOM);
+    }
+
+    @Test
+    public void isSingleValidationTypeCustomManual() {
+        assertEquals(singleValidationWithCustomManual.getValidationType(), SingleValidation.ValidationType.CUSTOM_MANUAL);
     }
 
     @Test(expected = MissingEditTextException.class)
