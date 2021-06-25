@@ -1,9 +1,11 @@
 package com.ryubal.materialvalidation;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
@@ -76,5 +78,12 @@ public class FullValidationActivity extends AppCompatActivity {
             builder.setPositiveButton(android.R.string.ok, null);
             errorAlert = builder.show();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        finish();
+
+        return super.onOptionsItemSelected(item);
     }
 }

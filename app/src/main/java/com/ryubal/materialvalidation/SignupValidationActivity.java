@@ -1,9 +1,11 @@
 package com.ryubal.materialvalidation;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.MenuItem;
 
 import com.ryubal.materialvalidation.databinding.ActivitySignupValidationBinding;
 import com.ryubal.materialvalidation.validations.Range;
@@ -43,5 +45,12 @@ public class SignupValidationActivity extends AppCompatActivity {
 
         if(validator.validate())
             Utils.showAlert(this, "Ok!", "All fields are valid");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        finish();
+
+        return super.onOptionsItemSelected(item);
     }
 }
