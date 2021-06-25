@@ -17,11 +17,14 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        binding.buttonBasicValidation.setOnClickListener(view -> {
-            Intent intent = new Intent(this, BasicValidationActivity.class);
-            startActivity(intent);
-        });
+        binding.buttonBasicValidation.setOnClickListener(view -> openActivity(BasicValidationActivity.class));
+        binding.buttonSignupValidation.setOnClickListener(view -> openActivity(SignupValidationActivity.class));
+        binding.buttonFullValidation.setOnClickListener(view -> openActivity(FullValidationActivity.class));
 
         setContentView(binding.getRoot());
+    }
+
+    private void openActivity(Class<?> cls) {
+        startActivity(new Intent(this, cls));
     }
 }

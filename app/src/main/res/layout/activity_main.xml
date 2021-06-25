@@ -28,6 +28,20 @@
             android:layout_height="wrap_content"
             android:text="Basic validation" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSignupValidation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Signup validation" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonFullValidation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Full validation" />
+
     </LinearLayout>
 
 </ScrollView>
