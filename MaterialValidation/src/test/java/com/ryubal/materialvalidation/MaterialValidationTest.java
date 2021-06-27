@@ -24,12 +24,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/*
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static org.mockito.Matchers.*;
-*/
-
 @RunWith(MockitoJUnitRunner.class)
 public class MaterialValidationTest {
     @Mock TextInputLayout textInputLayout;
