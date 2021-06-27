@@ -16,12 +16,12 @@ import java.util.regex.Pattern;
 public class SingleValidation {
     private TextInputLayout textInputLayout;
     private String errorMsg;
-    private Pattern pattern;                        // If applicable
-    private Range range;                            // If applicable
-    private Simple simpleValidation;                // If applicable
-    private int simpleValidationArg;                // If applicable
-    private CustomValidation customValidation;      // If applicable
-    private CustomManualValidation customManualValidation; // If applicable
+    private Pattern pattern;                                        // If applicable
+    private Range range;                                            // If applicable
+    private Simple simpleValidation;                                // If applicable
+    private int simpleValidationArg;                                // If applicable
+    private CustomValidation customValidation;                      // If applicable
+    private CustomManualValidation customManualValidation;          // If applicable
     public enum ValidationType {
         PATTERN, RANGE, SIMPLE, CUSTOM, CUSTOM_MANUAL
     };

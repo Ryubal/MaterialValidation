@@ -11,6 +11,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * A class that helps you validate Material Design components - More specifically TextInputEditText contained
+ * in a TextInputLayout.
+ * You must instantiate this class with no arguments, and add validations afterwards with the "add" methods.
+ * Whenever you'd like to actually run the validations, call the {@link #validate()} method. Refer to the documentation
+ * for more information
+ */
 public class MaterialValidation {
 
     // Holder of all of the validations that were added
@@ -19,49 +26,87 @@ public class MaterialValidation {
     // Holder of invalid text input layouts
     private List<TextInputLayout> invalidTextInputLayouts;
 
-    // Constructor
+    /**
+     * Creates a new instance of the validator
+     */
     public MaterialValidation() {
         this.validationsList = new ArrayList<>();
         this.invalidTextInputLayouts = new ArrayList<>();
     }
 
-    // Manual validation
+    /**
+     * Adds a new custom manual validation
+     * @param customManualValidation The actual validation callback. The validation
+     *                               will be added to the list of validations of this instance,
+     *                               and when the {@link #validate()} method is called, it will be executed
+     *                               along the rest of the validations.
+     */
     public void add(CustomManualValidation customManualValidation) {
         SingleValidation singleValidation = new SingleValidation(customManualValidation);
         validationsList.add(singleValidation);
     }
 
-    // Add a new rule with Regex as String
+    /**
+     * Adds a new validation with a regular expression
+     * @param textInputLayout A reference to the TextInputLayout. Inside there must be a TextInputEditText.
+     * @param regex The regular expression
+     * @param errorMsg The error to be shown if the field is invalid
+     */
     public void add(TextInputLayout textInputLayout, String regex, String errorMsg) {
         Pattern pattern = Pattern.compile(regex);
         add(textInputLayout, pattern, errorMsg);
     }
 
-    // Add a new rule with Regex as Pattern
+    /**
+     * Adds a new validation with a compiled pattern
+     * @param textInputLayout A reference to the TextInputLayout. Inside there must be a TextInputEditText.
+     * @param pattern The compiled pattern
+     * @param errorMsg The error to be shown if the field is invalid
+     */
     public void add(TextInputLayout textInputLayout, Pattern pattern, String errorMsg) {
         SingleValidation singleValidation = new SingleValidation(textInputLayout, pattern, errorMsg);
         validationsList.add(singleValidation);
     }
 
-    // Add a new rule with Range -- It will validate the text is a number between "from" and "to" in Range
+    /**
+     * Adds a new validation with an int range
+     * @param textInputLayout A reference to the TextInputLayout. Inside there must be a TextInputEditText.
+     * @param range The range. Input has to be numeric, within this range.
+     * @param errorMsg The error to be shown if the field is invalid
+     */
     public void add(TextInputLayout textInputLayout, Range range, String errorMsg) {
         SingleValidation singleValidation = new SingleValidation(textInputLayout, range, errorMsg);
         validationsList.add(singleValidation);
     }
 
-    // Add a new rule with Simple validation -- Is is a pre-defined validation with an argument
+    /**
+     * Adds a new validation with a simple (pre-defined) validation rule
+     * @param textInputLayout A reference to the TextInputLayout. Inside there must be a TextInputEditText.
+     * @param simple The pre-defined validation
+     * @param errorMsg The error to be shown if the field is invalid
+     */
     public void add(TextInputLayout textInputLayout, Simple simple, int arg, String errorMsg) {
         SingleValidation singleValidation = new SingleValidation(textInputLayout, simple, arg, errorMsg);
         validationsList.add(singleValidation);
     }
 
-    // Add a new rule with a Custom validation
+    /**
+     * Adds a new validation with a custom validation
+     * @param textInputLayout A reference to the TextInputLayout. Inside there must be a TextInputEditText.
+     * @param customValidation The custom validation
+     * @param errorMsg The error to be shown if the field is invalid
+     */
     public void add(TextInputLayout textInputLayout, CustomValidation customValidation, String errorMsg) {
         SingleValidation singleValidation = new SingleValidation(textInputLayout, customValidation, errorMsg);
         validationsList.add(singleValidation);
     }
 
-    // Run validation
+    /**
+     * Runs all of the validations that were added to this instance.
+     * Whenever a validation fails, the associated error will be shown below the corresponding TextInputEditText.
+     *
+     * @return true if all fields were valid, false if at least one field is invalid
+     */
     public boolean validate() {
         boolean isValid = true;
 
@@ -77,7 +122,6 @@ public class MaterialValidation {
                 if (!invalidTextInputLayouts.contains(validation.getTextInputLayout())) {
                     boolean isCurrentValid;
 
-                    // PATTERN, RANGE, SIMPLE, CUSTOM
                     if (validation.getValidationType() == SingleValidation.ValidationType.PATTERN)
                         isCurrentValid = validateRegex(validation);
                     else if (validation.getValidationType() == SingleValidation.ValidationType.RANGE)
@@ -101,6 +145,11 @@ public class MaterialValidation {
         return isValid;
     }
 
+    /**
+     * After you run the {@link #validate()} method, this will return a list of the fields that were invalid
+     *
+     * @return List of fields that were invalid
+     */
     public List<TextInputLayout> getInvalidFields() {
         return this.invalidTextInputLayouts;
     }
