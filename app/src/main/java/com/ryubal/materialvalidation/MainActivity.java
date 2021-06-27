@@ -15,8 +15,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Configure view binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
+        // Set button listeners
         binding.buttonBasicValidation.setOnClickListener(view -> openActivity(BasicValidationActivity.class));
         binding.buttonSignupValidation.setOnClickListener(view -> openActivity(SignupValidationActivity.class));
         binding.buttonFullValidation.setOnClickListener(view -> openActivity(FullValidationActivity.class));

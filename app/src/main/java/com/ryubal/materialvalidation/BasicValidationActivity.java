@@ -20,20 +20,27 @@ public class BasicValidationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Configure view binding
         binding = ActivityBasicValidationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Set title and show "go back" button
         getSupportActionBar().setTitle("Basic validation");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Set submit listener
         binding.buttonSubmit.setOnClickListener(view -> onSubmit());
     }
 
+    // When clicking on submit
     private void onSubmit() {
+        // Initialize the validator and add two rules
         MaterialValidation validator = new MaterialValidation();
         validator.add(binding.textInputUsername, Regex.NON_EMPTY, "Please enter your username");
         validator.add(binding.textInputPassword, Regex.NON_EMPTY, "Please enter your password");
 
+        // If the fields are valid, show a success alert
+        // If one or more fields are invalid, show which one
         if(validator.validate())
             Utils.showAlert(this, "Ok!", "All fields are valid");
         else {
@@ -48,10 +55,10 @@ public class BasicValidationActivity extends AppCompatActivity {
         }
     }
 
+    // When clicking the "go back" button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         finish();
-
         return super.onOptionsItemSelected(item);
     }
 }

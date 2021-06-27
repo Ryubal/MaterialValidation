@@ -24,25 +24,36 @@ public class FullValidationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Configure view binding
         binding = ActivityFullValidationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Set title and show "go back" button
         getSupportActionBar().setTitle("Full validation");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Set list of genders
         List<String> genders = new ArrayList<>();
         genders.add("Male");
         genders.add("Female");
         ArrayAdapter<List<String>> gendersAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, genders);
         ((AutoCompleteTextView) binding.textInputGender.getEditText()).setAdapter(gendersAdapter);
 
+        // Set submit listener
         binding.buttonSubmit.setOnClickListener(view -> onSubmit());
     }
 
+    // When clicking on submit
     private void onSubmit() {
+        // Initialize the validator and add rules
         MaterialValidation validator = new MaterialValidation();
         validator.add(binding.textInputName, Regex.LETTERS, "Please enter your name");
         validator.add(binding.textInputGender, Regex.NON_EMPTY, "Please select a gender");
+
+        // Add custom manual validations - We need to take care of validation and showing/hiding
+        // the error.
+        // Custom manual validations are meant to be used with elements that MaterialValidation
+        // does not know how to use
         validator.add(() -> {
             boolean isSelected = binding.checkBox.isChecked();
             if (!isSelected)
@@ -64,6 +75,7 @@ public class FullValidationActivity extends AppCompatActivity {
             return isSelected;
         });
 
+        // If all fields are valid, show a success alert
         if (validator.validate())
             Utils.showAlert(this, "Ok!", "All fields are valid");
     }
@@ -80,6 +92,7 @@ public class FullValidationActivity extends AppCompatActivity {
         }
     }
 
+    // When clicking the "go back" button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         finish();
