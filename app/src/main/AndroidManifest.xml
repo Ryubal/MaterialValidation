@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialValidation">
-        <activity android:name=".FullValidationActivity"></activity>
-        <activity android:name=".SignupValidationActivity" />
-        <activity android:name=".BasicValidationActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".examples.FullValidationActivity"></activity>
+        <activity android:name=".examples.SignupValidationActivity" />
+        <activity android:name=".examples.BasicValidationActivity" />
+        <activity android:name=".examples.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

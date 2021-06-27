@@ -1,5 +1,10 @@
 package com.ryubal.materialvalidation;
 
+import com.ryubal.materialvalidation.examples.BasicValidationActivity;
+import com.ryubal.materialvalidation.examples.FullValidationActivity;
+import com.ryubal.materialvalidation.examples.MainActivity;
+import com.ryubal.materialvalidation.examples.SignupValidationActivity;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

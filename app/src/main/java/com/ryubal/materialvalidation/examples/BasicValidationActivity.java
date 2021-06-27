@@ -1,4 +1,4 @@
-package com.ryubal.materialvalidation;
+package com.ryubal.materialvalidation.examples;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.ryubal.materialvalidation.MaterialValidation;
 import com.ryubal.materialvalidation.databinding.ActivityBasicValidationBinding;
 import com.ryubal.materialvalidation.validations.Regex;
 

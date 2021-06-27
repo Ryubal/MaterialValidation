@@ -1,4 +1,4 @@
-package com.ryubal.materialvalidation;
+package com.ryubal.materialvalidation.examples;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.ryubal.materialvalidation.MaterialValidation;
 import com.ryubal.materialvalidation.databinding.ActivityFullValidationBinding;
 import com.ryubal.materialvalidation.validations.Regex;
 

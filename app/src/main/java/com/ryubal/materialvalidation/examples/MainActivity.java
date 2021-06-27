@@ -1,4 +1,4 @@
-package com.ryubal.materialvalidation;
+package com.ryubal.materialvalidation.examples;
 
 import androidx.appcompat.app.AppCompatActivity;
 
