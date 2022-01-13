@@ -53,7 +53,7 @@ public class MaterialValidation {
      * @param errorMsg The error to be shown if the field is invalid
      */
     public void add(TextInputLayout textInputLayout, String regex, String errorMsg) {
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
         add(textInputLayout, pattern, errorMsg);
     }
 
